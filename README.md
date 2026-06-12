@@ -1,6 +1,7 @@
+
 # TradingSimulator
 
-A console-based stock trading simulator built in Java with live market data, 
+A console-based stock trading simulator built in Java with live market data,
 portfolio tracking, and bank-style account management.
 
 ## Features
@@ -18,3 +19,10 @@ portfolio tracking, and bank-style account management.
 ## Built With
 - Java
 - Alpha Vantage API
+
+## TODO
+- [ ] Save and load portfolio to file
+- [ ] User login system
+- [ ] Multiple stock portfolio tracking
+- [ ] Profit/loss tracking per position
+- [ ] JavaFX GUI
