@@ -1,15 +1,18 @@
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 
 public class StockFetcher {
         public StockFetcher() {
         }
         public static double getPrice(String symbol) throws Exception {
-            String apiKey = "EULJ47F66P394KTM";
+            Properties props = new Properties();
+            props.load(new FileInputStream("config.properties"));
+            String apiKey = props.getProperty("API_KEY");
             String urlString = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol + "&apikey=" + apiKey;
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
