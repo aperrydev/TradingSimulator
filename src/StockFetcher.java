@@ -31,7 +31,7 @@ public class StockFetcher {
                 throw new IllegalStateException("Bad response for " + symbol + " (probably rate-limited): " +json);
             }
             JSONObject quote = json.getJSONObject("Global Quote");
-            if(!json.has("05. price")){
+            if(!quote.has("05. price")){
                 throw new IllegalArgumentException("'" + symbol + "' isn't a valid ticker.");
             }
             double price = quote.getDouble("05. price");

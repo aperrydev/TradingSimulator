@@ -50,9 +50,20 @@ public class Main {
             System.out.println("4. ----View Balance-----");
             System.out.println("5. ---------Exit--------");
             System.out.print("What would you like to do today?: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+
+            String input = scanner.nextLine();
+            if(!input.matches("\\d+")){
+                System.out.println("Please enter a number from the menu.");
+                continue;
+            }
+            int choice = Integer.parseInt(input);
+
             switch(choice){
+
+                default:
+                    System.out.println("That's not a valid option, pick 1-5.");
+                    break;
+
                 case 1:
                     System.out.print("What stock would you like to purchase?: ");
                     ticker = scanner.nextLine();
@@ -63,6 +74,7 @@ public class Main {
                     scanner.nextLine();
                     account.buyStock(ticker,shares,price);
                     break;
+
                 case 2:
                     System.out.print("What stock would you like to sell?: ");
                     ticker = scanner.nextLine();
@@ -73,12 +85,15 @@ public class Main {
                     scanner.nextLine();
                     account.sellStock(ticker,shares,price);
                     break;
+
                 case 3:
                    account.viewHoldings();
                    break;
+
                 case 4:
                     account.getBalance();
                     break;
+
                 case 5:
                     System.out.println("Goodbye and have a nice day!");
                     active = false;
