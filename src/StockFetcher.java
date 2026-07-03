@@ -27,7 +27,13 @@ public class StockFetcher {
 
             reader.close();
             JSONObject json = new JSONObject(response.toString());
+            if(!json.has("Global Quote")){
+                throw new IllegalStateException("Bad response for " + symbol + " (probably rate-limited): " +json);
+            }
             JSONObject quote = json.getJSONObject("Global Quote");
+            if(!json.has("05. price")){
+                throw new IllegalArgumentException("'" + symbol + "' isn't a valid ticker.");
+            }
             double price = quote.getDouble("05. price");
             return price;
         }
