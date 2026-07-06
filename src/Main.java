@@ -12,11 +12,21 @@ public class Main {
             String choice = scanner.nextLine();
             choice = choice.toLowerCase();
             if (choice.contains("y")) {
-                System.out.print("Enter your first and last name: ");
-                String name = scanner.nextLine();
-                String[] nameParts = name.split(" ");
-                String firstName = nameParts[0];
-                String lastName = nameParts[1];
+                String firstName = "";
+                String lastName = "";
+                while(true){
+                    System.out.print("Enter your first and last name: ");
+                    String name = scanner.nextLine().trim();
+                    String[] nameParts = name.split("\\s+");
+                    if(nameParts.length >= 2){
+                        firstName= nameParts[0];
+                        lastName = nameParts[1];
+                        break;
+                    }
+                    System.out.println("Please enter your first AND last name.");
+                }
+
+
                 System.out.print("Enter your age: ");
                 int age = scanner.nextInt();
                 scanner.nextLine();
