@@ -2,6 +2,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Properties;
@@ -9,7 +10,7 @@ import java.util.Properties;
 public class StockFetcher {
         public StockFetcher() {
         }
-        public static double getPrice(String symbol) throws Exception {
+        public static BigDecimal getPrice(String symbol) throws Exception {
             Properties props = new Properties();
             props.load(new FileInputStream("config.properties"));
             String apiKey = props.getProperty("API_KEY");
@@ -34,7 +35,7 @@ public class StockFetcher {
             if(!quote.has("05. price")){
                 throw new IllegalArgumentException("'" + symbol + "' isn't a valid ticker.");
             }
-            double price = quote.getDouble("05. price");
+            BigDecimal price = quote.getBigDecimal("05. price");
             return price;
         }
     }

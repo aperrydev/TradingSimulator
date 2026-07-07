@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 public class TradingAccount {
@@ -8,12 +9,12 @@ public class TradingAccount {
        this.account = new Account(firstName, lastName, age);
         this.holdings = new HashMap<>();
     }
-    void buyStock(String ticker, int shares, double price){
-        if(shares * price > account.viewBalance()){
+    void buyStock(String ticker, int shares, BigDecimal price){
+        if(price.multiply(BigDecimal.valueOf(shares)).compareTo(account.viewBalance()) > 0){
             System.out.println("Insufficient Funds");
             return;
         }
-        account.withdraw(price * shares);
+        account.withdraw(price.multiply(BigDecimal.valueOf(shares)));
         if(holdings.containsKey(ticker)){
             holdings.put(ticker, holdings.get(ticker) + shares);
         }
@@ -22,10 +23,10 @@ public class TradingAccount {
         }
 
     }
-    void sellStock(String ticker, int shares, double price){
+    void sellStock(String ticker, int shares, BigDecimal price){
         if(holdings.containsKey(ticker)){
             if(holdings.get(ticker) >= shares){
-                account.deposit(price * shares);
+                account.deposit(price.multiply(BigDecimal.valueOf(shares)));
                 holdings.put(ticker, holdings.get(ticker)-shares);
                 if(holdings.get(ticker) == 0){
                     holdings.remove(ticker);
@@ -46,11 +47,11 @@ public class TradingAccount {
             System.out.println(entry.getKey() + " | Shares: " + entry.getValue());
         }
     }
-    double getBalance() {
+    BigDecimal getBalance() {
         System.out.printf("Balance: $%.2f%n",account.viewBalance());
         return account.viewBalance();
     }
-    void deposit(double amount) {
+    void deposit(BigDecimal amount) {
         account.deposit(amount);
     }
 }

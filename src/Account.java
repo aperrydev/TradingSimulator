@@ -1,9 +1,11 @@
+import java.math.BigDecimal;
+
 public class Account {
 
     private String firstName;
     private String lastName;
     private int age;
-    private double balance = 0;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     Account() {
     }
@@ -38,29 +40,33 @@ public class Account {
         this.age = age;
     }
 
-    public double viewBalance(){
+    public BigDecimal viewBalance(){
         return balance;
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
+    public void deposit(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
             System.out.println("Deposit amount can not be negative.");
             return;
         }
-        balance += amount;
+        balance = balance.add(amount);
         System.out.printf("Deposited $%.2f successfully.%n", amount);
     }
 
-    public void withdraw(double amount) {
-        if (amount <= 0) {
+    public void withdraw(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
             System.out.println("Withdraw amount can not be negative.");
             return;
         }
-        if (amount > balance) {
+        if (amount.compareTo(BigDecimal.ZERO) == 0) {
+            System.out.println("Withdraw amount must be above 0.");
+            return;
+        }
+        if (amount.compareTo(balance) > 0) {
             System.out.println("Insufficient funds.");
             return;
         }
-        balance -= amount;
+        balance = balance.subtract(amount);
         System.out.printf("Withdrew $%.2f successfully.%n", amount);
     }
 }

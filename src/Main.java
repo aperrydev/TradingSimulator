@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Main {
@@ -25,8 +26,6 @@ public class Main {
                     }
                     System.out.println("Please enter your first AND last name.");
                 }
-
-
                 System.out.print("Enter your age: ");
                 int age = scanner.nextInt();
                 scanner.nextLine();
@@ -49,7 +48,7 @@ public class Main {
     public static void tradingMenu(TradingAccount account) throws Exception{
         boolean active = true;
         String ticker = "";
-        double price;
+        BigDecimal price;
         int shares;
 
         while(active){
@@ -70,9 +69,6 @@ public class Main {
 
             switch(choice){
 
-                default:
-                    System.out.println("That's not a valid option, pick 1-5.");
-                    break;
 
                 case 1:
                     System.out.print("What stock would you like to purchase?: ");
@@ -108,6 +104,10 @@ public class Main {
                     System.out.println("Goodbye and have a nice day!");
                     active = false;
                     break;
+
+                default:
+                    System.out.println("That's not a valid option, pick 1-5.");
+                    break;
             }
 
         }
@@ -117,7 +117,8 @@ public class Main {
         TradingAccount account = createAccount();
         if(account != null){
             System.out.println("You get a starting bonus of $10,000\nGood luck!!!");
-            account.deposit(10000);
+            BigDecimal bonus = new BigDecimal("10000");
+            account.deposit(bonus);
             tradingMenu(account);
         }
 
