@@ -6,6 +6,9 @@ public class TradingAccount {
     private Account account;
     private HashMap<String, Position> holdings;
 
+    Position getPosition(String ticker) {
+        return holdings.get(ticker.trim().toUpperCase());
+    }
     TradingAccount(String firstName, String lastName, int age) {
        this.account = new Account(firstName, lastName, age);
         this.holdings = new HashMap<>();
@@ -70,6 +73,10 @@ public class TradingAccount {
         System.out.println("Realized P&L: $" + realizedPNL);
     }
     void viewHoldings(){
+        if (holdings.isEmpty()) {
+            System.out.println("You don't own any stocks yet.");
+            return;
+        }
         for(HashMap.Entry<String, Position> entry : holdings.entrySet()){
             Position pos = entry.getValue();
             System.out.println(pos.getTicker() + " | Shares: " + pos.getShares()
