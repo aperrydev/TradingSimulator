@@ -60,12 +60,12 @@ public class Main {
             System.out.println("5. ---------Exit--------");
             System.out.print("What would you like to do today?: ");
 
-            String input = scanner.nextLine();
-            if(!input.matches("\\d+")){
+            String choiceInput = scanner.nextLine();
+            if(!choiceInput.matches("\\d+")){
                 System.out.println("Please enter a number from the menu.");
                 continue;
             }
-            int choice = Integer.parseInt(input);
+            int choice = Integer.parseInt(choiceInput);
 
             switch(choice){
 
@@ -73,11 +73,21 @@ public class Main {
                 case 1:
                     System.out.print("What stock would you like to purchase?: ");
                     ticker = scanner.nextLine();
-                    price = StockFetcher.getPrice(ticker);
+                    try{
+                        price = StockFetcher.getPrice(ticker);
+                    } catch (Exception e) {
+                        System.out.println("Couldn't get a price: " +e.getMessage());
+                        break;
+                    }
+
                     System.out.println(ticker +"| $" +price);
                     System.out.print("How many shares of "+ticker+" would you like to purchase?: ");
-                    shares = scanner.nextInt();
-                    scanner.nextLine();
+                    String sharesInput = scanner.nextLine();
+                    if(!sharesInput.matches("\\d+")){
+                        System.out.println("Please enter a number");
+                        continue;
+                    }
+                    shares = Integer.parseInt(sharesInput);
                     account.buyStock(ticker,shares,price);
                     break;
 

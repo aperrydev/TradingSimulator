@@ -1,50 +1,79 @@
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 
 public class TradingAccount {
     private Account account;
-    private HashMap<String, Integer> holdings;
+    private HashMap<String, Position> holdings;
 
     TradingAccount(String firstName, String lastName, int age) {
        this.account = new Account(firstName, lastName, age);
         this.holdings = new HashMap<>();
     }
     void buyStock(String ticker, int shares, BigDecimal price){
+        ticker = ticker.trim().toUpperCase();
+        if (shares <= 0) {
+            System.out.println("Shares must be a positive number.");
+            return;
+        }
+
         if(price.multiply(BigDecimal.valueOf(shares)).compareTo(account.viewBalance()) > 0){
             System.out.println("Insufficient Funds");
             return;
         }
         account.withdraw(price.multiply(BigDecimal.valueOf(shares)));
         if(holdings.containsKey(ticker)){
-            holdings.put(ticker, holdings.get(ticker) + shares);
+           Position pos = holdings.get(ticker);
+           int oldShares = pos.getShares();
+           BigDecimal oldAvg = pos.getAvgCost();
+
+           BigDecimal oldValue = oldAvg.multiply(BigDecimal.valueOf(oldShares));
+           BigDecimal newValue = price.multiply(BigDecimal.valueOf(shares));
+           int totalShares = oldShares + shares;
+
+           BigDecimal newAvg = oldValue.add(newValue).divide(BigDecimal.valueOf(totalShares), 4, RoundingMode.HALF_UP);
+
+           pos.setShares(totalShares);
+           pos.setAvgCost(newAvg);
         }
         else{
-            holdings.put(ticker, shares);
+            holdings.put(ticker, new Position(ticker, shares, price));
         }
 
     }
     void sellStock(String ticker, int shares, BigDecimal price){
-        if(holdings.containsKey(ticker)){
-            if(holdings.get(ticker) >= shares){
-                account.deposit(price.multiply(BigDecimal.valueOf(shares)));
-                holdings.put(ticker, holdings.get(ticker)-shares);
-                if(holdings.get(ticker) == 0){
-                    holdings.remove(ticker);
-                }
+
+        ticker = ticker.trim().toUpperCase();
+            if (shares <= 0) {
+                System.out.println("Shares must be a positive number.");
+                return;
             }
-            else{
+            if (!holdings.containsKey(ticker)) {
+                System.out.println("You do not own shares of that stock.");
+                return;
+            }
+
+            Position pos = holdings.get(ticker);
+
+            if (pos.getShares() < shares) {
                 System.out.println("You do not own enough shares of that stock.");
                 return;
             }
-        }
-        else{
-            System.out.println("You do not own shares of that stock.");
-            return;
-        }
+
+               account.deposit(price.multiply(BigDecimal.valueOf(shares)));
+               BigDecimal realizedPNL = price.subtract(pos.getAvgCost()).multiply(BigDecimal.valueOf(shares));
+               pos.setShares(pos.getShares() - shares);
+               if(pos.getShares() == 0){
+                   holdings.remove(ticker);
+                   System.out.println("You no longer own any shares of |" + ticker);
+               }
+        System.out.println("Realized P&L: $" + realizedPNL);
     }
     void viewHoldings(){
-        for(HashMap.Entry<String, Integer> entry : holdings.entrySet()){
-            System.out.println(entry.getKey() + " | Shares: " + entry.getValue());
+        for(HashMap.Entry<String, Position> entry : holdings.entrySet()){
+            Position pos = entry.getValue();
+            System.out.println(pos.getTicker() + " | Shares: " + pos.getShares()
+                    + " | Avg Cost: $" + pos.getAvgCost());
         }
     }
     BigDecimal getBalance() {
