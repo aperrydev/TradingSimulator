@@ -15,6 +15,10 @@ public class Account {
         this.lastName = lastName;
         this.age = age;
     }
+    Account(String firstName, String lastName, int age, BigDecimal balance){
+        this(firstName, lastName, age);
+        this.balance = balance;
+    }
 
     public String getFirstName() {
         return firstName;

@@ -5,12 +5,18 @@ import java.util.HashMap;
 public class TradingAccount {
     private Account account;
     private HashMap<String, Position> holdings;
+    private long id;
 
     Position getPosition(String ticker) {
         return holdings.get(ticker.trim().toUpperCase());
     }
     TradingAccount(String firstName, String lastName, int age) {
-       this.account = new Account(firstName, lastName, age);
+        this.account = new Account(firstName, lastName, age);
+        this.holdings = new HashMap<>();
+    }
+    TradingAccount(long id, String firstName, String lastName, int age, BigDecimal balance) {
+        this.id = id;
+        this.account = new Account(firstName, lastName, age, balance);
         this.holdings = new HashMap<>();
     }
     void buyStock(String ticker, int shares, BigDecimal price){

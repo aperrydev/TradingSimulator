@@ -48,4 +48,24 @@ public class AccountRepository {
             return rs.next();
         }
     }
+    public TradingAccount loadAccount(String username) throws SQLException{
+        String sql = "SELECT * FROM accounts WHERE username = ?";
+        try(Connection conn = DriverManager.getConnection(url);
+        PreparedStatement ps = conn.prepareStatement(sql)){
+
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+
+            if(!rs.next()){
+                return null;
+            }
+            long id = rs.getLong("id");
+            String firstName = rs.getString("first_name");
+            String lastName = rs.getString("last_name");
+            int age = rs.getInt("age");
+            BigDecimal balance = new BigDecimal(rs.getString("balance"));
+            return new TradingAccount(id, firstName, lastName, age, balance);
+        }
+    }
 }
+
