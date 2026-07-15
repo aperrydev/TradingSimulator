@@ -4,6 +4,7 @@ out/
 !**/src/test/**/out/
 .kotlin
 config.properties
+trading.db
 ### Eclipse ###
 .apt_generated
 .classpath
