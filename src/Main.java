@@ -85,7 +85,7 @@ public class Main {
                     String sharesInput = scanner.nextLine();
                     if(!sharesInput.matches("\\d+")){
                         System.out.println("Please enter a number");
-                        continue;
+                        break;
                     }
                     shares = Integer.parseInt(sharesInput);
                     account.buyStock(ticker,shares,price);
@@ -94,12 +94,21 @@ public class Main {
                 case 2:
                     System.out.print("What stock would you like to sell?: ");
                     ticker = scanner.nextLine();
-                    price = StockFetcher.getPrice(ticker);
-                    System.out.println(ticker+ "| $" +price);
-                    System.out.print("How many shares of "+ticker+" would you like to sell?");
-                    shares = scanner.nextInt();
-                    scanner.nextLine();
-                    account.sellStock(ticker,shares,price);
+                    try {
+                        price = StockFetcher.getPrice(ticker);
+                    } catch (Exception e) {
+                        System.out.println("Couldn't get a price: " + e.getMessage());
+                        break;
+                    }
+                    System.out.println(ticker + "| $" + price);
+                    System.out.print("How many shares of " + ticker + " would you like to sell?: ");
+                    String sellSharesInput = scanner.nextLine();
+                    if (!sellSharesInput.matches("\\d+")) {
+                        System.out.println("Please enter a number");
+                        break;
+                    }
+                    shares = Integer.parseInt(sellSharesInput);
+                    account.sellStock(ticker, shares, price);
                     break;
 
                 case 3:

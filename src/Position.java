@@ -1,7 +1,7 @@
 import java.math.BigDecimal;
 
 public class Position {
-    private  String ticker = "";
+    private final String ticker;
     private int shares;
     private BigDecimal avgCost;
 
@@ -18,9 +18,6 @@ public class Position {
     }
     public BigDecimal getAvgCost(){
         return avgCost;
-    }
-    public void setTicker(String ticker) {
-        this.ticker = ticker;
     }
     public void setShares(int shares) {
         this.shares = shares;

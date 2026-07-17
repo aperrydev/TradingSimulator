@@ -1,5 +1,7 @@
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.Collection;
+
 public class AccountRepository {
     private final String url = "jdbc:sqlite:trading.db";
 
@@ -67,5 +69,39 @@ public class AccountRepository {
             return new TradingAccount(id, firstName, lastName, age, balance);
         }
     }
-}
+    public void savePositions(long accountId, Collection<Position> positions) throws SQLException{
+        try(Connection conn  = DriverManager.getConnection(url)){
+            try(PreparedStatement del = conn.prepareStatement(
+                    "DELETE FROM positions WHERE account_id = ?")){
+                del.setLong(1, accountId);
+                del.executeUpdate();
+            }
+            try(PreparedStatement ins = conn.prepareStatement(
+                    "INSERT INTO positions (account_id, ticker, shares, avg_cost) VALUES (?,?,?,?)")){
+                for(Position p : positions){
+                    ins.setLong(1, accountId);
+                    ins.setString(2, p.getTicker());
+                    ins.setInt(3, p.getShares());
+                    ins.setString(4, p.getAvgCost().toString());
+                    ins.executeUpdate();
+                }
 
+            }
+
+        }
+    }
+    public void loadPositions(TradingAccount account) throws SQLException{
+        String sql = "SELECT * FROM positions WHERE account_id = ?";
+        try(Connection conn = DriverManager.getConnection(url);
+        PreparedStatement ps = conn.prepareStatement(sql)){
+           ps.setLong(1, account.getId());
+           ResultSet rs = ps.executeQuery();
+           while(rs.next()){
+               String ticker = rs.getString("ticker");
+               int shares = rs.getInt("shares");
+               BigDecimal avg = new BigDecimal(rs.getString("avg_cost"));
+               account.addPosition(new Position(ticker,shares,avg));
+           }
+        }
+    }
+}

@@ -1,5 +1,6 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class TradingAccount {
@@ -7,6 +8,18 @@ public class TradingAccount {
     private HashMap<String, Position> holdings;
     private long id;
 
+    long getId(){
+       return id;
+   }
+    void setId(long id){
+        this.id = id;
+    }
+    Collection<Position> getPositions(){
+        return holdings.values();
+   }
+    void addPosition(Position pos){
+        holdings.put(pos.getTicker(), pos);
+   }
     Position getPosition(String ticker) {
         return holdings.get(ticker.trim().toUpperCase());
     }
