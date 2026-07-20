@@ -104,4 +104,13 @@ public class AccountRepository {
            }
         }
     }
+    public void updateBalance(long accountId, BigDecimal balance) throws SQLException{
+        String sql = "UPDATE accounts SET balance = ? WHERE id = ?";
+        try(Connection conn = DriverManager.getConnection(url);
+        PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, balance.toString());
+            ps.setLong(2, accountId);
+            ps.executeUpdate();
+        }
+    }
 }

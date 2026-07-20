@@ -109,4 +109,7 @@ public class TradingAccount {
     void deposit(BigDecimal amount) {
         account.deposit(amount);
     }
+    String getFirstName(){
+        return account.getFirstName();
+    }
 }
